@@ -1,0 +1,103 @@
+# a)     
+# Take a list of words and a maximum line width
+# [maxWidth] as input and return a list of strings where the words are arranged
+# in justified text format. Each line should have exactly maxWidth characters,
+# and extra spaces should be distributed as evenly as possible.
+
+def fullJustify(words,maxWidth):
+    result=[]
+    current_line=[]
+    current_length=0
+    
+    for word in words:
+        if current_length+len(word)+len(current_line)>maxWidth:
+            result.append(justify_line(current_line,maxWidth,False))
+            current_line=[]
+            current_length=0
+        
+        current_line.append(word)
+        current_length+=len(word)
+    if current_line:
+        result.append(justify_line(current_line,maxWidth,True))
+    return result
+
+def justify_line(words,maxWidth,is_last):
+    if is_last:
+        line=' '.join(words)
+        return line+' '*(maxWidth-len(line))
+    
+    total_chars=sum(len(word) for word in words)
+    total_gaps=len(words)-1
+    
+    if total_gaps==0:
+        return words[0]+' '*(maxWidth-len(words[0]))
+    
+    total_spaces=maxWidth-total_chars
+    spaces_per_gap=total_spaces//total_gaps
+    extra_spaces=total_spaces%total_gaps
+    
+    line=''
+    for i,word in enumerate(words[:-1]):
+        line+=word+' '*spaces_per_gap
+        if i < extra_spaces:
+            line+=' '
+    line+=words[-1]
+    return line
+
+# Example usage
+words=["This", "is", "an", "example", "of", "text", "justification"]
+maxWidth=16
+print(fullJustify(words, maxWidth))
+
+
+
+# b)
+# We are making n stone piles! The first pile has n stones. If
+# n is even, then all piles have an even number of stones. If n is odd, all piles
+# have an odd number of stones. Each pile must more stones than the previous pile
+# but as few as possible. Write a Python program to find the number of stones in
+# each pile.
+
+n=int(input("Enter a number:"))
+piles=[]
+for i in range(n):
+    piles.append(n+i*2)
+print(piles)
+
+
+
+
+# c)     
+# Write a Python program to get all
+# strobogrammatic numbers that are of length n.
+# A strobogrammatic number is a number whose numeral is rotationally symmetric,
+# so that it appears the same when rotated 180 degrees. In other words, the
+# numeral looks the same right-side up and upside down (e.g., 69, 96, 1001).
+
+def strobogrammatic(n,len=None):
+    if len is None:
+        len=n
+    if n==0:
+        return[""]
+    if n==1:
+        return["0", "1", "8"]
+    middles=strobogrammatic(n-1,len)
+    result=[]
+    pairs=[("0","0"),("1","1"),("6","9"),("8","8"),("9","6")]
+    for middle in middles:
+        for pair in pairs:
+            if n!=len or pair[0]!="0":
+                result.append(pair[0]+middle+pair[1])
+    return result
+# Test cases
+if __name__ == "__main__":
+    print("n=2:")
+    print(strobogrammatic(2))
+    print("\nn=3:")
+    print(strobogrammatic(3))
+  
+
+
+
+
+
